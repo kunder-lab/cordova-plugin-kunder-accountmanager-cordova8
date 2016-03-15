@@ -29,6 +29,16 @@ It's possible to moddify this plugins to allow multiple accounts.
 cordova plugin add https://github.com/kunder-lab/cordova-plugin-kunder-accountmanager
 ```
 
+## Account Manager settings
+
+You need to add the following settings in your config.xml file for Android Account Manager to work:
+
+```
+<preference name="AccountManagerLabel" value="Your Label Here" />
+<preference name="AccountManagerIconUrl" value="your_icon_url_here.png" />
+<preference name="AccountManagerType" value="your.unique.identifier" />
+```
+
 ## Supported Platforms
 
 - Android
