@@ -27,10 +27,6 @@
             </service>
         </config-file>
 
-        <config-file target="res/values/strings.xml" parent="/*">
-            <string name="authLabel">Name to show in account settings</string>
-        </config-file>
-
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="AccountManagerPlugin">
                 <param name="android-package" value="cl.kunder.accountmanager.AccountManagerPlugin"/>
@@ -41,6 +37,8 @@
         <source-file src="src/android/Authenticator.java" target-dir="src/cl/kunder/accountmanager" />
         <source-file src="src/android/AuthenticatorService.java" target-dir="src/cl/kunder/accountmanager" />
         <resource-file src="src/android/res/xml/authenticator.xml" target="res/xml/authenticator.xml" />
+
+        <hook type="before_build" src="hooks/before_build/001_account_manager_settings.js" />
     </platform>
 
     <platform name="ios">
