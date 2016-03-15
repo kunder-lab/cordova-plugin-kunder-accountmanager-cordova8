@@ -70,7 +70,5 @@ You need to add the following settings in your config.xml file for Android Accou
 
 ## License
 
-```
 Apache License 2.0
 
-```
