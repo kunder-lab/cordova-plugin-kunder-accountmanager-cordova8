@@ -67,3 +67,10 @@ You need to add the following settings in your config.xml file for Android Accou
 - You can delete account from Account Manager.
 - removeAccount remove all keychain data from your app.
 - You can not set user data to Account Manager if it doesn't have an account for your identifier.
+
+## License
+
+```
+Apache License 2.0
+
+```
