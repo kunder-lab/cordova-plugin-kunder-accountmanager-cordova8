@@ -54,3 +54,16 @@ You need to add the following settings in your config.xml file for Android Accou
 - setUserData: set object with information into Account Manager or Keychain
 - setPassword: update account password
 - resetPassword: update account password with String "0000"
+
+## Key Parameters
+
+- accountType: the same account type unique identifier set in config.xml file
+- group (Nullable): group identifier. Only for iOS shared keychain
+- data: key-value object
+
+## Notes
+
+- You can not delete user data from Account Manager. Use "setUserData" to change value to empty.
+- You can delete account from Account Manager.
+- removeAccount remove all keychain data from your app.
+- You can not set user data to Account Manager if it doesn't have an account for your identifier.
