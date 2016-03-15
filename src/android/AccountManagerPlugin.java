@@ -213,15 +213,14 @@ public class AccountManagerPlugin extends CordovaPlugin {
                         String value = userData.get(key).toString();
                         accountManager.setUserData(accounts[0],key,value);
                     }
+                    JSONObject r = new JSONObject();
+                    r.put("responseCode", "ok");
+                    callbackContext.success(r);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
                 }
             }   
-        }
-        else if(action.equals("removeDataFromKey")){
-            String accountType = args.getString(0);
-            String keyToDelete = args.getString(2);
-
         }
 
         else if(action.equals("changePassword")){
@@ -234,7 +233,10 @@ public class AccountManagerPlugin extends CordovaPlugin {
                 callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.INVALID_ACTION));
             }
             else{
-                accountManager.setPassword(accounts[0], newPassword);   
+                accountManager.setPassword(accounts[0], newPassword);  
+                JSONObject r = new JSONObject();
+                r.put("responseCode", "ok");
+                callbackContext.success(r); 
             }
         }
         return true;
