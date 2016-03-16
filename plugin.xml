@@ -38,7 +38,8 @@
         <source-file src="src/android/AuthenticatorService.java" target-dir="src/cl/kunder/accountmanager" />
         <resource-file src="src/android/res/xml/authenticator.xml" target="res/xml/authenticator.xml" />
 
-        <hook type="before_build" src="hooks/before_build/001_account_manager_settings.js" />
+        <hook type="after_plugin_install" src="hooks/after_plugin_install/001_account_manager_settings.js" />
+        
     </platform>
 
     <platform name="ios">
