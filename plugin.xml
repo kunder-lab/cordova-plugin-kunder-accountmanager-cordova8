@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        id="cordova-plugin-kunder-accountmanager" version="1.0">
+    <name>AccountManagerPlugin</name>
+    <description>Account Manager cordova plugin for android and keychain for iOS</description>
+    <license>Apache 2.0</license>
+    <keywords>cordova,accountmanager,android,plugin</keywords>
+
+    <js-module src="www/AccountManager.js" name="AccountManager">
+        <clobbers target="window.AccountManager" />
+    </js-module>
+
+    <platform name="android">
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"></uses-permission>
+            <uses-permission android:name="android.permission.GET_ACCOUNTS"></uses-permission>
+            <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <service android:name="cl.kunder.accountmanager.AuthenticatorService">
+                <intent-filter>
+                    <action android:name="android.accounts.AccountAuthenticator"/>
+                </intent-filter>
+                <meta-data android:name="android.accounts.AccountAuthenticator"
+                    android:resource="@xml/authenticator"/>
+            </service>
+        </config-file>
+
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="AccountManagerPlugin">
+                <param name="android-package" value="cl.kunder.accountmanager.AccountManagerPlugin"/>
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/AccountManagerPlugin.java" target-dir="src/cl/kunder/accountmanager" />
+        <source-file src="src/android/Authenticator.java" target-dir="src/cl/kunder/accountmanager" />
+        <source-file src="src/android/AuthenticatorService.java" target-dir="src/cl/kunder/accountmanager" />
+        <resource-file src="src/android/res/xml/authenticator.xml" target="res/xml/authenticator.xml" />
+
+        <hook type="after_plugin_install" src="hooks/after_plugin_install/001_account_manager_settings.js" />
+        
+    </platform>
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="AccountManagerPlugin">
+                <param name="ios-package" value="AccountManagerPlugin"/>
+            </feature>
+        </config-file>
+        <header-file src="src/ios/KeychainWrapper.h" />
+        <source-file src="src/ios/KeychainWrapper.m" />
+        <header-file src="src/ios/AccountManagerPlugin.h" />
+        <source-file src="src/ios/AccountManagerPlugin.m" />
+        
+        <framework src="Security.framework" />
+        <framework src="Foundation.framework"/>
+        <framework src="LocalAuthentication.framework"/>
+    </platform>
+</plugin>
