@@ -40,6 +40,8 @@
         <resource-file src="src/android/res/drawable/acm_icon.png" target="res/drawable/acm_icon.png" />
 
         <hook type="after_plugin_install" src="hooks/after_plugin_install/001_account_manager_settings.js" />
+        <hook type="before_build" src="hooks/after_plugin_install/001_account_manager_settings.js" />
+        <hook type="before_start" src="hooks/after_plugin_install/001_account_manager_settings.js" />
         
     </platform>
 
