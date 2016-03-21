@@ -168,7 +168,7 @@ public class AccountManagerPlugin extends CordovaPlugin {
             else { 
                 String password = accountManager.getPassword(accounts[0]);
                 JSONObject r = new JSONObject();
-                r.put("password", password);
+                r.put(key, password);
                 callbackContext.success(r);
             }
                

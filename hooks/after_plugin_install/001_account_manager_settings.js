@@ -17,14 +17,14 @@ module.exports = function(context) {
 	fs.writeFileSync('platforms/android/res/drawable/acm_icon.png', fs.readFileSync(iconUrl));
 
 	var authenticatorFile = fs.readFileSync('platforms/android/res/xml/authenticator.xml','utf8');
-	authenticatorFile = authenticatorFile.replace('android:icon="@drawable/here_your_icon"', 'android:icon="@drawable/acm_icon"');
-	authenticatorFile = authenticatorFile.replace('android:smallIcon="@drawable/here_your_icon"', 'android:smallIcon="@drawable/acm_icon"');
-	authenticatorFile = authenticatorFile.replace('android:accountType="here.the.unique.package.identifier"', 'android:accountType="'+accountType+'"');
+	authenticatorFile = authenticatorFile.replace(/android:icon="[ \S]*"/i, 'android:icon="@drawable/acm_icon"');
+	authenticatorFile = authenticatorFile.replace(/android:smallIcon="[ \S]*"/i, 'android:smallIcon="@drawable/acm_icon"');
+	authenticatorFile = authenticatorFile.replace(/android:accountType="[ \S]*"/i, 'android:accountType="'+accountType+'"');
 	fs.writeFileSync('platforms/android/res/xml/authenticator.xml', authenticatorFile);
 
 	var stringFile = fs.readFileSync('platforms/android/res/values/strings.xml','utf8');
 	if(stringFile.indexOf('<string name="authLabel">') > -1){
-		stringFile = stringFile.replace(/\<string name\=\"authLabel\"\>[\s\S]*\<\/string\>/i, '<string name="authLabel">'+label+'</string>');
+		stringFile = stringFile.replace(/\<string name\=\"authLabel\"\>[ \S]*\<\/string\>/i, '<string name="authLabel">'+label+'</string>');
 	}
 	else{
 		stringFile = stringFile.replace('</resources>', '<string name="authLabel">'+label+'</string></resources>');
