@@ -29,6 +29,7 @@
 @property (strong, nonatomic) KeychainWrapper* MyKeychainWrapper;
 @property (strong, nonatomic) LAContext* laContext;
 
+- (void) initWithKey:(CDVInvokedUrlCommand*)command;
 - (void) addAccount:(CDVInvokedUrlCommand*)command;
 - (void) removeAccount:(CDVInvokedUrlCommand*)command;
 - (void) getUserAccount:(CDVInvokedUrlCommand*)command;

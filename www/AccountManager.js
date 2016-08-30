@@ -2,6 +2,10 @@
 'use strict';
 module.exports = (function() {
 
+  var _initWithKey = function(encryptionKey, successCallback, errorCallback) {
+    cordova.exec(successCallback, errorCallback, 'AccountManagerPlugin', 'initWithKey', [encryptionKey]);
+  };
+
   var _addAccount = function(userName, password, accountType, group, userData, successCallback, errorCallback) {
     cordova.exec(successCallback, errorCallback, 'AccountManagerPlugin', 'addAccount', [userName, password, accountType, group, userData]);
   };
@@ -37,6 +41,7 @@ module.exports = (function() {
 
 
   return {
+    initWithKey: _initWithKey,
     registerAccount: _addAccount,
     removeAccount: _removeAccount,
     getUserAccount: _getUserAccount,
