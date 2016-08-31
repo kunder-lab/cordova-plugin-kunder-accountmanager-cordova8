@@ -218,7 +218,15 @@ public class AccountManagerPlugin extends CordovaPlugin {
                 callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.INVALID_ACTION));
             }
             else{
-                String data = accountManager.getUserData(accounts[0], keyData);
+                String encryptedKey;
+                try{
+                    encryptedKey = AESCrypt.encrypt(ENCRYPTION_KEY, keyData);
+                }catch (GeneralSecurityException e){
+                    callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
+                    return false;
+                }
+               
+                String data = accountManager.getUserData(accounts[0], encryptedKey);
                 if(data != null){
                     try{
                         data = AESCrypt.decrypt(ENCRYPTION_KEY, data);
