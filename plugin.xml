@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-        id="cordova-plugin-kunder-accountmanager" version="1.0">
+        id="cordova-plugin-kunder-accountmanager" version="1.0.0">
     <name>AccountManagerPlugin</name>
     <description>Account Manager cordova plugin for android and keychain for iOS</description>
     <license>Apache 2.0</license>
