@@ -20,9 +20,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Iterator;
 
+import com.scottyab.aescrypt.AESCrypt;
+import java.security.GeneralSecurityException;
+
 public class AccountManagerPlugin extends CordovaPlugin {
 
     private static final String TAG = "AccountManagerPlugin";
+    private static String ENCRYPTION_KEY = null;
 
     public AccountManagerPlugin(){
 
@@ -32,7 +36,17 @@ public class AccountManagerPlugin extends CordovaPlugin {
 
         AccountManager accountManager = AccountManager.get(cordova.getActivity().getApplicationContext());
 
-        if (action.equals("addAccount")) {
+        if(!action.equals("initWithKey") && ENCRYPTION_KEY == null){
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
+        }
+        else if (action.equals("initWithKey")) {
+            String encryptionKey = args.getString(0);
+            ENCRYPTION_KEY = encryptionKey;
+            JSONObject r = new JSONObject();
+            r.put("responseCode", "ok");
+            callbackContext.success(r);
+        }
+        else if (action.equals("addAccount")) {
             /*Esta acción necesita los siguientes parámetros: userAccount, password, authToken, accountType. Estos son Strings*/
 
             String userAccount = args.getString(0);
@@ -49,6 +63,14 @@ public class AccountManagerPlugin extends CordovaPlugin {
                 while (iterator.hasNext()){
                     String key = (String)iterator.next();
                     String value = jsonObject.get(key).toString();
+                    try{
+                        key = AESCrypt.encrypt(ENCRYPTION_KEY, key);
+                        value = AESCrypt.encrypt(ENCRYPTION_KEY, value);
+                    }catch (GeneralSecurityException e){
+                        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
+                        return false;
+                    }
+                    
                     userData.putString(key, value);
                 }
             } catch (JSONException e) {
@@ -62,6 +84,12 @@ public class AccountManagerPlugin extends CordovaPlugin {
                 //No hay cuentas, entonces es posible añadir una
                 
                 Account account = new Account(userAccount, accountType);
+                try{
+                    password = AESCrypt.encrypt(ENCRYPTION_KEY, password);
+                }catch (GeneralSecurityException e){
+                    callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
+                    return false;
+                }
                 if(accountManager.addAccountExplicitly(account, password, userData)){
                     // Toast.makeText(getApplicationContext(), "Registro de cuenta exitoso", Toast.LENGTH_LONG).show();
                     JSONObject r = new JSONObject();
@@ -166,7 +194,13 @@ public class AccountManagerPlugin extends CordovaPlugin {
                 callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.INVALID_ACTION));
             }
             else { 
-                String password = accountManager.getPassword(accounts[0]);
+                String password;
+                try{
+                    password = AESCrypt.decrypt(ENCRYPTION_KEY, accountManager.getPassword(accounts[0]));
+                }catch (GeneralSecurityException e){
+                    callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
+                    return false;
+                }
                 JSONObject r = new JSONObject();
                 r.put(key, password);
                 callbackContext.success(r);
@@ -184,8 +218,22 @@ public class AccountManagerPlugin extends CordovaPlugin {
                 callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.INVALID_ACTION));
             }
             else{
-                String data = accountManager.getUserData(accounts[0], keyData);
+                String encryptedKey;
+                try{
+                    encryptedKey = AESCrypt.encrypt(ENCRYPTION_KEY, keyData);
+                }catch (GeneralSecurityException e){
+                    callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
+                    return false;
+                }
+               
+                String data = accountManager.getUserData(accounts[0], encryptedKey);
                 if(data != null){
+                    try{
+                        data = AESCrypt.decrypt(ENCRYPTION_KEY, data);
+                    }catch (GeneralSecurityException e){
+                        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
+                        return false;
+                    }
                     JSONObject r = new JSONObject();
                     r.put(keyData, data);
                     callbackContext.success(r);
@@ -211,6 +259,14 @@ public class AccountManagerPlugin extends CordovaPlugin {
                     while (iterator.hasNext()){
                         String key = (String)iterator.next();
                         String value = userData.get(key).toString();
+                        try{
+                            key = AESCrypt.encrypt(ENCRYPTION_KEY, key);
+                            value = AESCrypt.encrypt(ENCRYPTION_KEY, value);
+                        }catch (GeneralSecurityException e){
+                            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
+                            return false;
+                        }
+                        
                         accountManager.setUserData(accounts[0],key,value);
                     }
                     JSONObject r = new JSONObject();
@@ -233,6 +289,13 @@ public class AccountManagerPlugin extends CordovaPlugin {
                 callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.INVALID_ACTION));
             }
             else{
+                try{
+                    newPassword = AESCrypt.encrypt(ENCRYPTION_KEY, newPassword);
+                }catch (GeneralSecurityException e){
+                    callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
+                    return false;
+                }
+                
                 accountManager.setPassword(accounts[0], newPassword);  
                 JSONObject r = new JSONObject();
                 r.put("responseCode", "ok");

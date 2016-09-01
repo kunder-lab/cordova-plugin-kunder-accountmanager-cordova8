@@ -23,7 +23,10 @@
 #import <Cordova/CDV.h>
 
 @implementation AccountManagerPlugin
-
+- (void) initWithKey:(CDVInvokedUrlCommand*)command{
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
 - (void) addAccount:(CDVInvokedUrlCommand*)command{
     
    

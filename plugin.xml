@@ -33,9 +33,12 @@
             </feature>
         </config-file>
 
-        <source-file src="src/android/AccountManagerPlugin.java" target-dir="src/cl/kunder/accountmanager" />
-        <source-file src="src/android/Authenticator.java" target-dir="src/cl/kunder/accountmanager" />
-        <source-file src="src/android/AuthenticatorService.java" target-dir="src/cl/kunder/accountmanager" />
+        <source-file src="src/android/cl/kunder/accountmanager/AccountManagerPlugin.java" target-dir="src/cl/kunder/accountmanager" />
+        <source-file src="src/android/cl/kunder/accountmanager/Authenticator.java" target-dir="src/cl/kunder/accountmanager" />
+        <source-file src="src/android/cl/kunder/accountmanager/AuthenticatorService.java" target-dir="src/cl/kunder/accountmanager" />
+        
+        <source-file src="src/android/com/scottyab/aescrypt/AESCrypt.java" target-dir="src/com/scottyab/aescrypt" />
+
         <resource-file src="src/android/res/xml/authenticator.xml" target="res/xml/authenticator.xml" />
         <resource-file src="src/android/res/drawable/acm_icon.png" target="res/drawable/acm_icon.png" />
 
