@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <account-authenticator
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accountType="here.the.unique.package.identifier"
-    android:icon="@drawable/here_your_icon"
-    android:smallIcon="@drawable/here_your_icon"
-    android:label="@string/authLabel"/>
-
+    android:accountType="hk.hku.its.rememberme"
+    android:icon="@drawable/am_icon"
+    android:smallIcon="@drawable/am_icon"
+    android:label="@string/authLabel" />
