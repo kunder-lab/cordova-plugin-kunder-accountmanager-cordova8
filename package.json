@@ -1,0 +1,24 @@
+{
+  "name": "cordova-plugin-its-accountmanager",
+  "version": "1.0.0",
+  "description": "Cordova plugin for Android Account Manager and iOS Keychain",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QuentinFung/cordova-plugin-its-accountmanager.git"
+  },
+  "keywords": [
+    "cordova",
+    "accountmanager",
+    "android",
+    "keychain",
+    "ios",
+    "plugin"
+  ],
+  "author": "Quentin Fung <quentin.fung@hku.hk>",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/QuentinFung/cordova-plugin-its-accountmanager/issues"
+  },
+  "homepage": "https://github.com/QuentinFung/cordova-plugin-its-accountmanager#readme"
+}

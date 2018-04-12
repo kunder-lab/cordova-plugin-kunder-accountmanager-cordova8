@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="cordova-plugin-its-accountmanager" version="1.0.0">
     <name>AccountManagerPlugin</name>
-    <description>Account Manager cordova plugin for android and keychain for iOS</description>
+    <description>Cordova plugin for Android Account Manager and iOS Keychain</description>
     <license>Apache 2.0</license>
     <keywords>cordova,accountmanager,android,keychain,ios,plugin</keywords>
 
