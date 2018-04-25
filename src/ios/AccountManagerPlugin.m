@@ -28,13 +28,11 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 - (void) addAccount:(CDVInvokedUrlCommand*)command{
-    
-   
     NSString *userAccount = (NSString*)[command.arguments objectAtIndex:0];
     NSString *password = (NSString*)[command.arguments objectAtIndex:1];
     NSString *service = (NSString*)[command.arguments objectAtIndex:2];
     NSString *group = (NSString*)[command.arguments objectAtIndex:3];
-    
+
     NSMutableDictionary *userData = (NSMutableDictionary*)[command.arguments objectAtIndex:4];
 
     @try{
@@ -42,11 +40,11 @@
         self.MyKeychainWrapper = [[KeychainWrapper alloc]initWithService:service withGroup:group withKey:@"userAccount"];
         if(![self.MyKeychainWrapper insertData:userAccount])
             [self.MyKeychainWrapper updateData:userAccount];
-                
+
         self.MyKeychainWrapper = [[KeychainWrapper alloc]initWithService:service withGroup:group withKey:@"password"];
         if(![self.MyKeychainWrapper insertData:password])
             [self.MyKeychainWrapper updateData:password];
-                
+
         /*Reccorriendo diccionario y guardando la información en el keychain*/
         for(NSString *key in userData){
             self.MyKeychainWrapper = [[KeychainWrapper alloc]initWithService:service withGroup:group withKey:key];
@@ -54,24 +52,19 @@
                 [self.MyKeychainWrapper updateData:[userData objectForKey:key]];
             }
         }
-        
-            
-        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: @"New account added"];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
     @catch(NSException *exception){
-        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: @"No se puede guardar el dato en el keychain"];
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: @"Fail to add account"];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
-        
-    
-    
-    
 }
 
 - (void) removeAccount:(CDVInvokedUrlCommand*)command{
     //Implica eliminar todo el keychain
-    
+
     self.MyKeychainWrapper = [[KeychainWrapper alloc]init];
     if([self.MyKeychainWrapper removeAllData]){
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
@@ -86,21 +79,42 @@
 - (void) getUserAccount:(CDVInvokedUrlCommand*)command{
     NSString *service = (NSString*)[command.arguments objectAtIndex:0];
     NSString *group = (NSString*)[command.arguments objectAtIndex:1];
-    NSString *returnKey = (NSString*)[command.arguments objectAtIndex:2];
-    
+    //NSString *scope = (NSString*)[command.arguments objectAtIndex:2];
+
     self.MyKeychainWrapper = [[KeychainWrapper alloc] initWithService:service withGroup:group withKey:@"userAccount"];
-    NSData *resultData = [self.MyKeychainWrapper getData];
-    
-    if(resultData != nil){
-        NSString *responseData = [[NSString alloc] initWithData:resultData encoding: NSUTF8StringEncoding];
-        NSMutableDictionary* retorno = [NSMutableDictionary dictionaryWithCapacity:1];
-        [retorno setObject:responseData forKey:returnKey];
+    NSData *accountData = [self.MyKeychainWrapper getData];
+    self.MyKeychainWrapper = [[KeychainWrapper alloc]initWithService:service withGroup:group withKey:@"password"];
+    NSData *passwordData = [self.MyKeychainWrapper getData];
+    self.MyKeychainWrapper = [[KeychainWrapper alloc]initWithService:service withGroup:group withKey:@"uid"];
+    NSData *uidData = [self.MyKeychainWrapper getData];
+    self.MyKeychainWrapper = [[KeychainWrapper alloc]initWithService:service withGroup:group withKey:@"univ_num"];
+    NSData *unoData = [self.MyKeychainWrapper getData];
+    self.MyKeychainWrapper = [[KeychainWrapper alloc]initWithService:service withGroup:group withKey:@"scope"];
+    NSData *scopeData = [self.MyKeychainWrapper getData];
+    NSString *name = (NSString*) @"name";
+    NSString *uidKey = (NSString*) @"uid";
+    NSString *unoKey = (NSString*) @"univ_num";
+    NSString *scopeKey = (NSString*) @"scope";
+    NSString *token = (NSString*) @"token";
+
+    if(accountData != nil){
+        NSString *account = [[NSString alloc] initWithData:accountData encoding: NSUTF8StringEncoding];
+        NSString *password = [[NSString alloc] initWithData:passwordData encoding:NSUTF8StringEncoding];
+        NSString *uid = [[NSString alloc] initWithData:uidData encoding:NSUTF8StringEncoding];
+        NSString *uno = [[NSString alloc] initWithData:unoData encoding:NSUTF8StringEncoding];
+        NSString *scope = [[NSString alloc] initWithData:scopeData encoding:NSUTF8StringEncoding];
+        NSMutableDictionary* retorno = [NSMutableDictionary dictionaryWithCapacity:5];
+        [retorno setObject:account forKey:name];
+        [retorno setObject:uid forKey:uidKey];
+        [retorno setObject:uno forKey:unoKey];
+        [retorno setObject:scope forKey:scopeKey];
+        [retorno setObject:password forKey:token];
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:retorno];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
     else{
-        NSString *message = @"Error al obtener el valor userAccount del keychain";
-        
+        NSString *message = @"Account not found";
+
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: message];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
@@ -112,10 +126,10 @@
     NSString *group = (NSString*)[command.arguments objectAtIndex:1];
     //Este parámetro es necesario para retornar el valor con una key personalizada
     NSString *returnKey = (NSString*)[command.arguments objectAtIndex:2];
-    
+
     self.MyKeychainWrapper = [[KeychainWrapper alloc]initWithService:service withGroup:group withKey:@"password"];
     NSData *passwordData = [self.MyKeychainWrapper getData];
-    
+
     if(passwordData != nil){
         NSString *password = [[NSString alloc] initWithData:passwordData encoding:NSUTF8StringEncoding];
         NSMutableDictionary* retorno = [NSMutableDictionary dictionaryWithCapacity:1];
@@ -125,30 +139,7 @@
     }
     else{
         NSString *message = @"Error al obtener el password del keychain";
-        
-        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: message];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-    }
-}
 
-- (void) getDataFromKey:(CDVInvokedUrlCommand*)command{
-    NSString *service = (NSString*)[command.arguments objectAtIndex:0];
-    NSString *group = (NSString*)[command.arguments objectAtIndex:1];
-    NSString *key = (NSString*)[command.arguments objectAtIndex:2];
-    
-    self.MyKeychainWrapper = [[KeychainWrapper alloc] initWithService:service withGroup:group withKey:key];
-    NSData *resultData = [self.MyKeychainWrapper getData];
-    
-    if(resultData != nil){
-        NSString *responseData = [[NSString alloc] initWithData:resultData encoding: NSUTF8StringEncoding];
-        NSMutableDictionary* retorno = [NSMutableDictionary dictionaryWithCapacity:1];
-        [retorno setObject:responseData forKey:key];
-        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:retorno];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-    }
-    else{
-        NSString *message = @"Error al obtener el valor del keychain";
-        
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: message];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
@@ -158,9 +149,9 @@
     NSString *service = (NSString*)[command.arguments objectAtIndex:0];
     NSString *group = (NSString*)[command.arguments objectAtIndex:1];
     NSMutableDictionary *userData = (NSMutableDictionary*)[command.arguments objectAtIndex:2];
-    
+
     @try{
-        
+
         /*Reccorriendo diccionario y guardando la información en el keychain*/
         for(NSString *key in userData){
             self.MyKeychainWrapper = [[KeychainWrapper alloc]initWithService:service withGroup:group withKey:key];
@@ -170,8 +161,7 @@
             }
 
         }
-        
-        
+
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
@@ -186,10 +176,10 @@
     NSString *service = (NSString*)[command.arguments objectAtIndex:0];
     NSString *group = (NSString*)[command.arguments objectAtIndex:1];
     NSString *newPassword = (NSString*)[command.arguments objectAtIndex:2];
-    
+
     @try{
         self.MyKeychainWrapper = [[KeychainWrapper alloc] initWithService:service withGroup:group withKey:@"password"];
-        
+
         if([self.MyKeychainWrapper updateData:newPassword]){
             CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
