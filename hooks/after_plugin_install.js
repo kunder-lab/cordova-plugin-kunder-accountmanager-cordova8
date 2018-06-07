@@ -6,7 +6,7 @@ var fs = require('fs');
 module.exports = function(context) {
 
 	var cordova_util = context.requireCordovaModule('cordova-lib/src/cordova/util'),
-	ConfigParser = context.requireCordovaModule('cordova-lib/src/configparser/ConfigParser'),
+	ConfigParser = context.requireCordovaModule('cordova-common/src/configparser/ConfigParser'),
 	projectRoot = cordova_util.isCordova(),
 	xml = cordova_util.projectConfig(projectRoot),
 	cfg = new ConfigParser(xml),
@@ -14,7 +14,8 @@ module.exports = function(context) {
 	iconUrl = cfg.getPreference('AccountManagerIconUrl'),
 	accountType = cfg.getPreference('AccountManagerType');
 
-	fs.writeFileSync('platforms/android/res/drawable/am_icon.png', fs.readFileSync(iconUrl));
+	if (iconUrl != undefined && iconUrl != '')
+		fs.writeFileSync('platforms/android/res/drawable/am_icon.png', fs.readFileSync(iconUrl));
 
 	var authenticatorFile = fs.readFileSync('platforms/android/res/xml/authenticator.xml','utf8');
 	authenticatorFile = authenticatorFile.replace(/android:icon="[ \S]*"/i, 'android:icon="@drawable/am_icon"');
