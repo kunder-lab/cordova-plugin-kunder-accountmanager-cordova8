@@ -66,12 +66,18 @@
     //Implica eliminar todo el keychain
 
     self.MyKeychainWrapper = [[KeychainWrapper alloc]init];
-    if([self.MyKeychainWrapper removeAllData]){
-        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    @try{
+      if([self.MyKeychainWrapper removeAllData]){
+          CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: @"Account removed"];
+          [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+      }
+      else{
+          CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: @"Fail to remove account"];
+          [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+      }
     }
-    else{
-        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: @"Error al intentar eliminar los datos del keychain"];
+    @catch(NSException *exception){
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: [NSString stringWithFormat:@"Fail to remove account: %@", [exception reason]]];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
 }
