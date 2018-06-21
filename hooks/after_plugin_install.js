@@ -15,15 +15,15 @@ module.exports = function(context) {
 	accountType = cfg.getPreference('AccountManagerType');
 
 	if (iconUrl != undefined && iconUrl != '')
-		fs.writeFileSync('platforms/android/res/drawable/am_icon.png', fs.readFileSync(iconUrl));
+		fs.writeFileSync('platforms/android/app/src/main/res/drawable/am_icon.png', fs.readFileSync(iconUrl));
 
-	var authenticatorFile = fs.readFileSync('platforms/android/res/xml/authenticator.xml','utf8');
+	var authenticatorFile = fs.readFileSync('platforms/android/app/src/main/res/xml/authenticator.xml','utf8');
 	authenticatorFile = authenticatorFile.replace(/android:icon="[ \S]*"/i, 'android:icon="@drawable/am_icon"');
 	authenticatorFile = authenticatorFile.replace(/android:smallIcon="[ \S]*"/i, 'android:smallIcon="@drawable/am_icon"');
 	authenticatorFile = authenticatorFile.replace(/android:accountType="[ \S]*"/i, 'android:accountType="'+accountType+'"');
-	fs.writeFileSync('platforms/android/res/xml/authenticator.xml', authenticatorFile);
+	fs.writeFileSync('platforms/android/app/src/main/res/xml/authenticator.xml', authenticatorFile);
 
-	var stringFile = fs.readFileSync('platforms/android/res/values/strings.xml','utf8');
+	var stringFile = fs.readFileSync('platforms/android/app/src/main/res/values/strings.xml','utf8');
 	if(stringFile.indexOf('<string name="authLabel">') > -1){
 		stringFile = stringFile.replace(/\<string name\=\"authLabel\"\>[ \S]*\<\/string\>/i, '<string name="authLabel">'+label+'</string>');
 	}
@@ -31,5 +31,5 @@ module.exports = function(context) {
 		stringFile = stringFile.replace('</resources>', '<string name="authLabel">'+label+'</string></resources>');
 	}
 
-	fs.writeFileSync('platforms/android/res/values/strings.xml', stringFile);
+	fs.writeFileSync('platforms/android/app/src/main/res/values/strings.xml', stringFile);
 };
