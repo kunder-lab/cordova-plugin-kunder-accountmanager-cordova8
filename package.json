@@ -5,7 +5,7 @@
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/QuentinFung/cordova-plugin-its-accountmanager.git"
+    "url": "git+https://github.com/kunder-lab/cordova-plugin-kunder-accountmanager-cordova8.git"
   },
   "keywords": [
     "ecosystem:cordova",
@@ -21,7 +21,7 @@
   "author": "Quentin Fung <quentin.fung@hku.hk>",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/QuentinFung/cordova-plugin-its-accountmanager/issues"
+    "url": "https://github.com/kunder-lab/cordova-plugin-kunder-accountmanager-cordova8/issues"
   },
-  "homepage": "https://github.com/QuentinFung/cordova-plugin-its-accountmanager#readme"
+  "homepage": "https://github.com/kunder-lab/cordova-plugin-kunder-accountmanager-cordova8#readme"
 }

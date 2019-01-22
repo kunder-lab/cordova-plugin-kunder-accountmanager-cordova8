@@ -26,7 +26,7 @@ It's possible to moddify this plugins to allow multiple accounts.
 ## Installation
 
 ```
-cordova plugin add https://github.com/QuentinFung/cordova-plugin-its-accountmanager
+cordova plugin add https://github.com/kunder-lab/cordova-plugin-kunder-accountmanager-cordova8
 ```
 
 ## Account Manager settings
