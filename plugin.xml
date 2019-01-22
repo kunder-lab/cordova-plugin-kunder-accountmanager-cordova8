@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+  id="cordova-plugin-its-accountmanager"
+  version="1.0.0">
+  <name>AccountManager</name>
+  <description>Cordova plugin for Android Account Manager and iOS Keychain</description>
+  <author>quentin.fung@hku.hk</author>
+  <license>Apache 2.0</license>
+  <keywords>cordova,accountmanager,android,keychain,ios,plugin</keywords>
+
+  <js-module src="www/AccountManager.js" name="AccountManager">
+    <clobbers target="its.accountManager" />
+  </js-module>
+
+  <platform name="android">
+    <config-file target="AndroidManifest.xml" parent="/*">
+      <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+      <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+      <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    </config-file>
+
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <service android:name="hk.hku.its.accountmanager.AuthenticatorService">
+        <intent-filter>
+          <action android:name="android.accounts.AccountAuthenticator"/>
+        </intent-filter>
+        <meta-data android:name="android.accounts.AccountAuthenticator" android:resource="@xml/authenticator"/>
+      </service>
+    </config-file>
+
+    <config-file target="config.xml" parent="/*">
+      <feature name="AccountManager">
+        <param name="android-package" value="hk.hku.its.accountmanager.AccountManagerPlugin"/>
+      </feature>
+    </config-file>
+
+    <source-file src="src/android/hk/hku/its/accountmanager/AccountManagerPlugin.java" target-dir="src/hk/hku/its/accountmanager" />
+    <source-file src="src/android/hk/hku/its/accountmanager/Authenticator.java" target-dir="src/hk/hku/its/accountmanager" />
+    <source-file src="src/android/hk/hku/its/accountmanager/AuthenticatorService.java" target-dir="src/hk/hku/its/accountmanager" />
+
+    <source-file src="src/android/com/scottyab/aescrypt/AESCrypt.java" target-dir="src/com/scottyab/aescrypt" />
+
+    <resource-file src="src/android/res/xml/authenticator.xml" target="res/xml/authenticator.xml" />
+    <resource-file src="src/android/res/xml/account_preferences.xml" target="res/xml/account_preferences.xml" />
+    <resource-file src="src/android/res/drawable/am_icon.png" target="res/drawable/am_icon.png" />
+
+    <hook type="after_plugin_install" src="hooks/after_plugin_install.js" />
+    <hook type="before_build" src="hooks/after_plugin_install.js" />
+    <hook type="before_start" src="hooks/after_plugin_install.js" />
+  </platform>
+
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="AccountManager">
+        <param name="ios-package" value="AccountManagerPlugin"/>
+      </feature>
+    </config-file>
+
+    <header-file src="src/ios/KeychainWrapper.h" />
+    <source-file src="src/ios/KeychainWrapper.m" />
+    <header-file src="src/ios/AccountManagerPlugin.h" />
+    <source-file src="src/ios/AccountManagerPlugin.m" />
+
+    <framework src="Security.framework" />
+    <framework src="Foundation.framework"/>
+    <framework src="LocalAuthentication.framework"/>
+  </platform>
+</plugin>
