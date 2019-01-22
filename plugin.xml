@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-  id="cordova-plugin-its-accountmanager"
-  version="1.0.0">
+  id="cordova-plugin-its-accountmanager" version="1.0.0">
   <name>AccountManager</name>
   <description>Cordova plugin for Android Account Manager and iOS Keychain</description>
   <author>quentin.fung@hku.hk</author>
