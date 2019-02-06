@@ -44,7 +44,7 @@
     <resource-file src="src/android/res/drawable/am_icon.png" target="res/drawable/am_icon.png" />
 
     <hook type="after_plugin_install" src="hooks/after_plugin_install.js" />
-    <hook type="before_build" src="hooks/after_plugin_install.js" />
+    <hook type="before_compile" src="hooks/after_plugin_install.js" />
     <hook type="before_start" src="hooks/after_plugin_install.js" />
   </platform>
 
