@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-  id="cordova-plugin-its-accountmanager" version="1.0.0">
+  id="cordova-plugin-its-accountmanager" version="1.1.0">
   <name>AccountManager</name>
   <description>Cordova plugin for Android Account Manager and iOS Keychain</description>
   <author>quentin.fung@hku.hk</author>
@@ -44,7 +44,7 @@
     <resource-file src="src/android/res/drawable/am_icon.png" target="res/drawable/am_icon.png" />
 
     <hook type="after_plugin_install" src="hooks/after_plugin_install.js" />
-    <hook type="before_build" src="hooks/after_plugin_install.js" />
+    <hook type="before_compile" src="hooks/after_plugin_install.js" />
     <hook type="before_start" src="hooks/after_plugin_install.js" />
   </platform>
 
