@@ -9,3 +9,9 @@ First release of plugin with support for cordova 8.
 ## Description
 
 The hook types were modified. Now `hooks/after_plugins_install.js` runs _after\_plugin\_install_, _before\_start_ and _before\_compile_, instead of  _after\_plugin\_install_, _before\_start_ and _before\_prepare_.
+
+# 1.1.1
+
+## Description
+
+Removed "authLabel" autocomplete on after plugin install.
