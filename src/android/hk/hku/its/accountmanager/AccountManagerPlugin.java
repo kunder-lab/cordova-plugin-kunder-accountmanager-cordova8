@@ -287,6 +287,36 @@ public class AccountManagerPlugin extends CordovaPlugin {
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.INVALID_ACTION, "Scope not found in accountType"));
       }
     }
+    else if (action.equals("getDataFromKey")) {
+      String accountType = args.getString(0);
+      String keyData = args.getString(2);
+      Account [] accounts = accountManager.getAccountsByType(accountType);
+      if (accounts.length == 0) {
+        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.INVALID_ACTION));
+      } else {
+        String encryptedKey;
+        try {
+          encryptedKey = AESCrypt.encrypt(ENCRYPTION_KEY, keyData);
+        } catch (GeneralSecurityException e) {
+          callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
+          return false;
+        }
+        String data = accountManager.getUserData(accounts[0], encryptedKey);
+        if (data != null) {
+          try { 
+            data = AESCrypt.decrypt(ENCRYPTION_KEY, data);
+          } catch (GeneralSecurityException e) {
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
+            return false;
+          }
+          JSONObject r = new JSONObject();
+          r.put(keyData, data);
+          callbackContext.success(r);
+        } else {
+          callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
+        }
+      }
+    }
     // set account details
     else if (action.equals("setUserData")) {
       String accountType = args.getString(0);

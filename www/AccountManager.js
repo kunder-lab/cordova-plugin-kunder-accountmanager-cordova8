@@ -22,6 +22,10 @@ module.exports = (function() {
     cordova.exec(successCallback, errorCallback, 'AccountManager', 'getPassword', [accountType, group, scope]);
   };
 
+  var _getDataFromKey = function(accountType, group, key, successCallback, errorCallback) {
+    cordova.exec(successCallback, errorCallback, 'AccountManager', 'getDataFromKey', [accountType, group, key]);
+  };
+
   var _setUserData = function(accountType, group, data, successCallback, errorCallback) {
     cordova.exec(successCallback, errorCallback, 'AccountManager', 'setUserData', [accountType, group, data]);
   };
@@ -36,6 +40,7 @@ module.exports = (function() {
     removeAccount: _removeAccount,
     getUserAccount: _getUserAccount,
     getPassword: _getPassword,
+    getDataFromKey: _getDataFromKey,
     setUserData: _setUserData,
     setPassword: _changePassword
   };
