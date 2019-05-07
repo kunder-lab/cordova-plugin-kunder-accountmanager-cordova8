@@ -151,6 +151,28 @@
     }
 }
 
+- (void) getDataFromKey:(CDVInvokedUrlCommand*)command{
+    NSString *service = (NSString*)[command.arguments objectAtIndex:0];
+    NSString *group = (NSString*)[command.arguments objectAtIndex:1];
+    NSString *key = (NSString*)[command.arguments objectAtIndex:2];
+    
+    self.MyKeychainWrapper = [[KeychainWrapper alloc] initWithService:service withGroup:group withKey:key];
+    NSData *resultData = [self.MyKeychainWrapper getData];
+    
+    if(resultData != nil){
+        NSString *responseData = [[NSString alloc] initWithData:resultData encoding: NSUTF8StringEncoding];
+        NSMutableDictionary* retorno = [NSMutableDictionary dictionaryWithCapacity:1];
+        [retorno setObject:responseData forKey:key];
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:retorno];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }
+    else{
+        NSString *message = @"Error al obtener el valor del keychain";
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: message];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }
+}
+
 - (void) setUserData:(CDVInvokedUrlCommand*)command{
     NSString *service = (NSString*)[command.arguments objectAtIndex:0];
     NSString *group = (NSString*)[command.arguments objectAtIndex:1];
