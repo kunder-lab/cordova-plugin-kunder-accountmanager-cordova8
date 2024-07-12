@@ -19,7 +19,7 @@
     </config-file>
 
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
-      <service android:name="hk.hku.its.accountmanager.AuthenticatorService">
+      <service android:name="hk.hku.its.accountmanager.AuthenticatorService" android:exported="false">
         <intent-filter>
           <action android:name="android.accounts.AccountAuthenticator"/>
         </intent-filter>
